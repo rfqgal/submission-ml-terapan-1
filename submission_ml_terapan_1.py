@@ -190,20 +190,22 @@ correlation_matrix = numerical_features.corr().round(2)
 sns.heatmap(data=correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
 plt.title('Correlation Matrix untuk Fitur Numerik')
 
-"""Fitur ID memiliki korelasi yang sangat kecil (-0.38) dengan fitur Income, sehingga dapat dihilangkan."""
+"""Fitur ID memiliki korelasi yang sangat kecil (-0.38) dengan fitur Income, sehingga dapat dihilangkan.
+
+## Data Preparation
+
+Pada tahap ini dilakukan transformasi data, guna memastikan kualitas data sebelum digunakan dalam model Machine Learning. Berikut beberapa hal yang dilakukan:
+1. Menghapus Kolom ID
+2. Data Splitting
+4. Feature Encoding & Scaling
+
+### Menghapus Kolom ID
+"""
 
 df_filtered = df_filtered.drop(['ID'], axis=1)
 df_filtered.head()
 
-"""## Data Preparation
-
-Pada tahap ini dilakukan transformasi data, guna memastikan kualitas data sebelum digunakan dalam model Machine Learning. Berikut beberapa hal yang dilakukan:
-1. Data Splitting
-2. Feature Encoding
-3. Feature Scaling
-
-### Data Splitting
-"""
+"""### Data Splitting"""
 
 X = df_filtered.drop(['Income'], axis=1)
 y = df_filtered['Income']

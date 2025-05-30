@@ -84,7 +84,46 @@ Heatmap menunjukkan bahwa usia dan pendapatan memiliki korelasi positif yang mod
 
 Tahap data preparation dilakukan untuk memastikan data siap digunakan dalam pemodelan. Berikut adalah langkah-langkah yang dilakukan beserta alasannya:
 
-### 1. Data Splitting
+### 1. Menangani Outliers
+
+Proses ini langsung dilakukan di awal ketika ditemukannya outliers.
+
+```
+Q1 = numerical_features.quantile(0.25)
+Q3 = numerical_features.quantile(0.75)
+IQR = Q3 - Q1
+
+filter_outliers = ~((numerical_features < (Q1 - 1.5 * IQR)) |
+                    (numerical_features > (Q3 + 1.5 * IQR))).any(axis=1)
+
+df_filtered = df[filter_outliers]
+df_filtered.shape
+```
+
+#### Penjelasan Proses
+
+Tahap ini dilakukan dengan metode Interquartile Range (IQR) untuk memastikan kualitas data sebelum pemodelan. Proses dimulai dengan menghitung kuartil pertama (Q1) dan kuartil ketiga (Q3) dari fitur numerik, lalu menghitung IQR sebagai selisih Q3 dan Q1. Batas bawah dan atas ditentukan dengan rumus `Q1 - 1.5 * IQR` dan `Q3 + 1.5 * IQR`, kemudian data yang berada di luar rentang ini diidentifikasi sebagai outliers. Filter dibuat untuk mengecualikan baris dengan outliers, dan DataFrame difilter sesuai filter tersebut, menghasilkan dataset bersih yang digunakan untuk analisis lebih lanjut.
+
+#### Alasan Dilakukannya Proses
+
+Penanganan outliers dengan cara menghilangkannya dipilih karena perbandingan jumlah outliers dan keseluruhan data cukup kecil, yaitu 130:2000. Dataset akhir yang berjumlah 1870 masih cukup banyak untuk implementasi proyek ini.
+
+### 2. Menghapus Kolom ID
+
+```
+df_filtered = df_filtered.drop(['ID'], axis=1)
+df_filtered.head()
+```
+
+#### Penjelasan Proses
+
+DataFrame didefinisi ulang dengan menerapkan fungsi `drop()` yang berisi ID, yaitu nama kolom yang akan dihilangkan. Kemudian ditulis juga `axis=1` yang berarti perintah akan dijalankan pada keseluruhan deret kolom yang dimaksud.
+
+#### Alasan Dilakukannya Proses
+
+Fitur ID biasanya hanya merupakan identifikasi unik dari setiap baris data. Fitur ID ini memiliki korelasi yang sangat rendah, yaitu -0.38 terhadap variabel Income, sehingga tidak memberikan kontribusi signifikan dalam proyek prediksi pendapatan ini. Dengan menghapus fitur ID akan membantu mengurangi noise dan dimensi data, serta memastikan model fokus pada fitur yang relevan.
+
+### 3. Data Splitting
 
 ```
 X = df_filtered.drop(['Income'], axis=1)
@@ -105,7 +144,7 @@ Proses ini memisahkan dataset dalam perbandigan tertentu, biasanya 9:1 (seperti 
 
 Alasan dilakukannya proses ini untuk mempersiapkan masing-masing data yang dibutuhkan dan siap untuk digunakan dalam proses pelatihan dan pengujian. Data untuk pelatihan memerlukan perbandingan yang lebih banyak, karena proses pelatihan harus dilakukan dalam frekuensi yang lebih sering. Sedangkan data untuk pengujian hanya diperlukan dalam perbandingan yang kecil, karena proses pengujian tidak perlu dilakukan terlalu sering.
 
-### 2. Feature Encoding & Scaling
+### 4. Feature Encoding & Scaling
 
 ```
 preprocessor = ColumnTransformer([
@@ -129,34 +168,44 @@ Alasan dilakukannya Scaling pada fitur numerikal adalah mengubah nilai pada seti
 
 Pemodelan machine learning untuk proyek ini menggunakan tiga algoritma Regressor: K-Neighbors, Random Forest, dan AdaBoost. Setiap model dioptimalkan menggunakan hyperparameter tuning dengan `GridSearchCV`.
 
+### Tahap Penyusunan Model
+
+Tahapan penyusunan model dimulai dengan persiapan data yang telah dilakukan sebelumnya, di mana fitur numerik diskalakan menggunakan StandardScaler dan fitur kategorikal diencode dengan OneHotEncoder melalui ColumnTransformer untuk memastikan kompatibilitas dengan algoritma. Selanjutnya, tiga algoritma regresi yakni K-Nearest Neighbors (KNN), Random Forest, dan AdaBoost, didefinisi secara berurutan untuk melatih model dengan data train. Proses ini diikuti oleh evaluasi awal menggunakan Mean Squared Error (MSE) untuk membandingkan performa, kemudian dilakukan tuning hyperparameter menggunakan GridSearchCV untuk mengoptimalkan model. Akhirnya, model terbaik dipilih berdasarkan MSE terendah setelah tuning.
+
 ### Algoritma-algoritma yang Dipakai
 
 #### **1. K-Neighbors Regressor**
 
+- **Cara kerja**: Algoritma ini memprediksi dengan menghitung jarak antara data baru dan k tetangga terdekat dalam data latih, lalu mengambil rata-rata nilai target tetangga tersebut berdasarkan parameter k dan bobot yang ditentukan.
+
 - **Parameter yang digunakan**
 
   ```
-  KNeighborsRegressor(n_neighbors=15, weights='uniform').fit(X_train_encoded, y_train)
+  KNeighborsRegressor(n_neighbors=5).fit(X_train_encoded, y_train)
   ```
 - **Kelebihan algoritma**: Mudah diimplementasikan dan tidak memerlukan asumsi distribusi data.
 - **Kekurangan algoritma**: Sensitif terhadap skala data dan lambat pada dataset besar.
 
 #### **2. Random Forest Regressor**
 
+- **Cara kerja**: Algoritma ini membangun banyak pohon keputusan secara acak pada subset data dan fitur, kemudian menggabungkan prediksi semua pohon dengan rata-rata untuk meningkatkan akurasi dan mengurangi overfitting.
+
 - **Parameter yang digunakan**
 
   ```
-  RandomForestRegressor(n_estimators=200, max_depth=10, random_state=55, n_jobs=-1, max_features='sqrt', min_samples_leaf=2, min_samples_split=20).fit(X_train_encoded, y_train)
+  RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1).fit(X_train_encoded, y_train)
   ```
 - **Kelebihan algoritma**: Dapat menangani data dengan banyak fitur dan tidak mudah overfitting.
 - **Kekurangan algoritma**: Membutuhkan lebih banyak sumber daya komputasi.
 
 #### **3. AdaBoost Regressor**
 
+- **Cara kerja**: Algoritma ini melatih model secara berurutan, dengan setiap model berikutnya fokus memperbaiki kesalahan sebelumnya dengan memberikan bobot lebih pada data yang salah diprediksi, yang diatur oleh learning rate dari parameternya.
+
 - **Parameter yang digunakan**
 
   ```
-  AdaBoostRegressor(learning_rate=0.01,n_estimators=200, random_state=55).fit(X_train_encoded, y_train)
+  AdaBoostRegressor(learning_rate=0.05, random_state=55).fit(X_train_encoded, y_train)
   ```
 - **Kelebihan algoritma**: Baik untuk meningkatkan performa model yang lemah.
 - **Kekurangan algoritma**: Sensitif terhadap noise dan outlier.
@@ -179,6 +228,14 @@ grid_search_rf = GridSearchCV(random_forest, param_grid_randomForest, cv=5, scor
 grid_search_rf.fit(X_train_encoded, y_train)
 print("Best Parameters for Random Forest:", grid_search_rf.best_params_)
 ```
+
+Proses ini dilakukan pada setiap model dan menghasilkan parameter terbaik untuk setiap modelnya, dengan rincian sebagai berikut:
+
+- **K-Neighbors Regressor**: `{'n_neighbors': 15, 'weights': 'uniform'}`
+
+- **Random Forest Regressor**: `{'max_depth': 10, 'max_features': 'log2', 'min_samples_leaf': 5, 'min_samples_split': 20, 'n_estimators': 200}`
+
+- **AdaBoost Regressor**: `{'learning_rate': 0.01, 'n_estimators': 200}`
 
 ### Pemilihan Model Terbaik
 
@@ -204,13 +261,23 @@ MSE bekerja dengan menghitung kuadrat setiap error (perbedaan) untuk menghilangk
 
 ### Hasil Evaluasi Awal Sebelum Tuning
 
+Evaluasi awal dari model yang masing-masing menggunakan parameter standar atau default diperoleh sebagai berikut, di mana **AdaBoost** memiliki nilai MSE yang lebih kecil dibandingkan model lainnya.
+
 ![Evaluation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/evaluation.png)
+
+Saat dilakukan 1 kali percobaan prediksi untuk nilai aktual 150.000, K-Neighbors Regressor memiliki nilai prediksi yang paling tinggi dengan rincian sebagai berikut:
+
+2. KNN memprediksi 123.759.
+3. AdaBoost memprediksi 121.699.
+1. Random Forest memprediksi 121.306.
+
+Namun tidak dapat disimpulkan bahwa model tersebut yang terbaik, karena percobaan prediksi baru dilakukan 1 kali saja.
 
 ### Hasil Evaluasi Setelah Dilakukannya Tuning
 
-![Re-evaluation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/re-evaluation.png)
+Berikutnya setelah dilakukan Hyperparameter Tuning, Random Forest memberikan hasil terbaik dengan MSE terendah, menunjukkan bahwa model ini mampu menjelaskan variansi data dengan baik dan memberikan prediksi yang akurat.
 
-Random Forest memberikan hasil terbaik dengan MSE terendah, menunjukkan bahwa model ini mampu menjelaskan variansi data dengan baik dan memberikan prediksi yang akurat.
+![Re-evaluation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/re-evaluation.png)
 
 Dalam tes prediksi untuk nilai aktual 150.000 diperoleh nilai prediksi sebagai berikut:
 
