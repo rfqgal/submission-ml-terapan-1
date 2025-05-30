@@ -54,6 +54,12 @@ Proyek ini menggunakan dataset "Socioeconomic Factors and Income Dataset" yang t
 
 Pada tahap analisis nilai kosong atau hilang, dapat diketahui bahwa **tidak ditemukan** adanya nilai yang hilang pada dataset.
 
+#### Duplicate Data
+
+![Duplicates](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/duplicates.png)
+
+Pada tahap pengecekan data duplikat, juga **tidak ditemukan** adanya data duplikat pada dataset.
+
 #### Outliers
 
 ![Outliers](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/outliers.png)
