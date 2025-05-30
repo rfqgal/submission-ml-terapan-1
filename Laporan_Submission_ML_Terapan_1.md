@@ -202,7 +202,11 @@ Pada formula di atas, n adalah jumlah observasi, yáµ¢ adalah nilai aktual, dan Å
 
 MSE bekerja dengan menghitung kuadrat setiap error (perbedaan) untuk menghilangkan efek negatif dan memberi bobot lebih pada error besar, lalu mengambil rata-ratanya dari semua data. Oleh sebab itu, nilai MSE yang lebih kecil menunjukkan model yang lebih akurat dalam memprediksi nilai.
 
-### Hasil Evaluasi
+### Hasil Evaluasi Awal Sebelum Tuning
+
+![Evaluation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/evaluation.png)
+
+### Hasil Evaluasi Setelah Dilakukannya Tuning
 
 ![Re-evaluation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/re-evaluation.png)
 
