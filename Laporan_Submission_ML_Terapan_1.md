@@ -191,7 +191,7 @@ MSE bekerja dengan menghitung kuadrat setiap error (perbedaan) untuk menghilangk
 
 ### Hasil Evaluasi
 
-...
+![Re-evaluation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/master/images/re-evaluation.png)
 
 Random Forest memberikan hasil terbaik dengan MSE terendah, menunjukkan bahwa model ini mampu menjelaskan variansi data dengan baik dan memberikan prediksi yang akurat.
 
