@@ -48,32 +48,29 @@ Proyek ini menggunakan dataset "Socioeconomic Factors and Income Dataset" yang t
 
 ### Exploratory Data Analysis (EDA):
 
-#### Outliers
-
-![Outliers](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/outliers.png)
-
 #### Missing Values
 
 ![Missing Values](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/missing-values.png)
 
+Pada tahap analisis nilai kosong atau hilang, dapat diketahui bahwa **tidak ditemukan** adanya nilai yang hilang pada dataset.
+
+#### Outliers
+
+![Outliers](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/outliers.png)
+
+Pada tahap analisis outliers, diketahui terdapat outliers pada Income dan Age yang jumlahnya mencapai 130. Jika dibandingkan dengan jumlah keseluruhan data, yaitu 2000, maka tidak masalah jika seluruh **outliers dibuang** dari dataset.
+
 #### Analisis Tambahan
 
-Untuk memahami data lebih lanjut, dilakukan visualisasi relativitas variabel kategorikal dengan variabel target (Income) menggunakan `catplot`. Berikut adalah kode untuk visualisasi tersebut:
+Untuk memahami data lebih lanjut, dilakukan visualisasi relativitas variabel kategorikal dengan variabel target (Income) menggunakan `catplot`. Berikut visualisasi yang dihasilkan:
 
-```
-for column in categorical_columns:
-  sns.catplot(x=column, y='Income', kind='bar', dodge=False, height=4, aspect=3, data=df_filtered)
-  plt.title(f'Relativitas Income terhadap {column}')
-```
+![Income-Occupation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/income-occupation.png)
 
-Distribusi pendapatan menunjukkan bahwa sebagian besar individu memiliki pendapatan di bawah 150.000, dengan beberapa outlier yang memiliki pendapatan lebih tinggi. Selain itu, korelasi antar variabel numerik dianalisis menggunakan heatmap:
+Distribusi pendapatan menunjukkan bahwa sebagian besar individu memiliki pendapatan di bawah 150.000, yaitu masyarakat dengan Occupation "skilled employee / official" dan yang paling rendah "unemployed / unskilled".
 
-```
-plt.figure(figsize=(10, 8))
-correlation_matrix = numerical_features.corr().round(2)
-sns.heatmap(data=correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
-plt.title('Correlation Matrix untuk Fitur Numerik')
-```
+Selain itu, korelasi antar variabel numerik dianalisis menggunakan heatmap:
+
+![Heatmap](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/heatmap.png)
 
 Heatmap menunjukkan bahwa usia dan pendapatan memiliki korelasi positif yang moderat, sementara variabel lain seperti Settlement size juga memiliki pengaruh tertentu.
 
