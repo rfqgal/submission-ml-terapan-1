@@ -48,6 +48,16 @@ Proyek ini menggunakan dataset "Socioeconomic Factors and Income Dataset" yang t
 
 ### Exploratory Data Analysis (EDA):
 
+#### Outliers
+
+![Outliers](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/outliers.png)
+
+#### Missing Values
+
+![Missing Values](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/missing-values.png)
+
+#### Analisis Tambahan
+
 Untuk memahami data lebih lanjut, dilakukan visualisasi relativitas variabel kategorikal dengan variabel target (Income) menggunakan `catplot`. Berikut adalah kode untuk visualisasi tersebut:
 
 ```
@@ -191,7 +201,7 @@ MSE bekerja dengan menghitung kuadrat setiap error (perbedaan) untuk menghilangk
 
 ### Hasil Evaluasi
 
-![Re-evaluation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/master/images/re-evaluation.png)
+![Re-evaluation](https://raw.githubusercontent.com/rfqgal/submission-ml-terapan-1/refs/heads/master/images/re-evaluation.png)
 
 Random Forest memberikan hasil terbaik dengan MSE terendah, menunjukkan bahwa model ini mampu menjelaskan variansi data dengan baik dan memberikan prediksi yang akurat.
 
