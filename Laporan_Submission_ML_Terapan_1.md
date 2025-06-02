@@ -181,7 +181,7 @@ Tahapan penyusunan model dimulai dengan persiapan data yang telah dilakukan sebe
 - **Parameter yang digunakan**
 
   ```
-  KNeighborsRegressor(n_neighbors=5).fit(X_train_encoded, y_train)
+  (n_neighbors=5)
   ```
 - **Kelebihan algoritma**: Mudah diimplementasikan dan tidak memerlukan asumsi distribusi data.
 - **Kekurangan algoritma**: Sensitif terhadap skala data dan lambat pada dataset besar.
@@ -193,7 +193,7 @@ Tahapan penyusunan model dimulai dengan persiapan data yang telah dilakukan sebe
 - **Parameter yang digunakan**
 
   ```
-  RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1).fit(X_train_encoded, y_train)
+  (n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)
   ```
 - **Kelebihan algoritma**: Dapat menangani data dengan banyak fitur dan tidak mudah overfitting.
 - **Kekurangan algoritma**: Membutuhkan lebih banyak sumber daya komputasi.
@@ -205,7 +205,7 @@ Tahapan penyusunan model dimulai dengan persiapan data yang telah dilakukan sebe
 - **Parameter yang digunakan**
 
   ```
-  AdaBoostRegressor(learning_rate=0.05, random_state=55).fit(X_train_encoded, y_train)
+  (learning_rate=0.05, random_state=55)
   ```
 - **Kelebihan algoritma**: Baik untuk meningkatkan performa model yang lemah.
 - **Kekurangan algoritma**: Sensitif terhadap noise dan outlier.
@@ -231,11 +231,20 @@ print("Best Parameters for Random Forest:", grid_search_rf.best_params_)
 
 Proses ini dilakukan pada setiap model dan menghasilkan parameter terbaik untuk setiap modelnya, dengan rincian sebagai berikut:
 
-- **K-Neighbors Regressor**: `{'n_neighbors': 15, 'weights': 'uniform'}`
+- **K-Neighbors Regressor**
+  ```
+  {'n_neighbors': 15, 'weights': 'uniform'}
+  ```
 
-- **Random Forest Regressor**: `{'max_depth': 10, 'max_features': 'log2', 'min_samples_leaf': 5, 'min_samples_split': 20, 'n_estimators': 200}`
+- **Random Forest Regressor**:
+  ```
+  {'max_depth': 10, 'max_features': 'log2', 'min_samples_leaf': 5, 'min_samples_split': 20, 'n_estimators': 200}
+  ```
 
-- **AdaBoost Regressor**: `{'learning_rate': 0.01, 'n_estimators': 200}`
+- **AdaBoost Regressor**: 
+  ```
+  {'learning_rate': 0.01, 'n_estimators': 200}
+  ```
 
 ### Pemilihan Model Terbaik
 
