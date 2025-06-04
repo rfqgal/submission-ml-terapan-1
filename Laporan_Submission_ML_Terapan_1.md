@@ -238,7 +238,7 @@ Proses ini dilakukan pada setiap model dan menghasilkan parameter terbaik untuk 
 
 - **Random Forest Regressor**:
   ```
-  {'max_depth': 10, 'max_features': 'log2', 'min_samples_leaf': 5, 'min_samples_split': 20, 'n_estimators': 200}
+  {'max_depth': 10, 'max_features': 'sqrt', 'min_samples_leaf': 2, 'min_samples_split': 20, 'n_estimators': 100}
   ```
 
 - **AdaBoost Regressor**: 
@@ -290,8 +290,8 @@ Berikutnya setelah dilakukan Hyperparameter Tuning, Random Forest memberikan has
 
 Dalam tes prediksi untuk nilai aktual 150.000 diperoleh nilai prediksi sebagai berikut:
 
-1. Random Forest memprediksi 117.279.
+1. Random Forest memprediksi 117.165.
 2. KNN memprediksi 118.083.
-3. AdaBoost memprediksi 121.537.
+3. AdaBoost memprediksi 120.352.
 
 Meskipun AdaBoost memberikan prediksi terdekat pada satu percobaan, **Random Forest tetap dipilih karena performa keseluruhan yang lebih baik berdasarkan metrik evaluasi**.

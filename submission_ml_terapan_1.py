@@ -307,7 +307,7 @@ param_grid_randomForest = {
     'max_depth': [10, 20],
     'min_samples_split': (5, 10, 15, 20),
     'min_samples_leaf': (2, 5, 10, 15) ,
-    'max_features': ['log2', 'sqrt',None],
+    'max_features': ['log2', 'sqrt', None],
 }
 
 random_forest = RandomForestRegressor()
@@ -335,10 +335,10 @@ best_models = pd.DataFrame(index=['train_mse', 'test_mse'],
 best_knn = KNeighborsRegressor(n_neighbors=15,weights='uniform').fit(X_train_encoded, y_train)
 best_models.loc['train_mse','K-Nearest'] = mean_squared_error(y_pred = best_knn.predict(X_test_encoded), y_true=y_test)
 
-best_rf = RandomForestRegressor(n_estimators=200, max_depth=10, random_state=55,n_jobs=-1, max_features='sqrt', min_samples_leaf=2, min_samples_split=20).fit(X_train_encoded, y_train)
+best_rf = RandomForestRegressor(max_depth=10, max_features='sqrt', min_samples_leaf=2, min_samples_split=20, n_estimators=100).fit(X_train_encoded, y_train)
 best_models.loc['train_mse','RandomForest'] = mean_squared_error(y_pred=best_rf.predict(X_test_encoded), y_true=y_test)
 
-best_ab = AdaBoostRegressor(learning_rate=0.01,n_estimators=200, random_state=55).fit(X_train_encoded, y_train)
+best_ab = AdaBoostRegressor(learning_rate=0.01,n_estimators=100).fit(X_train_encoded, y_train)
 best_models.loc['train_mse','AdaBoost'] = mean_squared_error(y_pred=best_ab.predict(X_test_encoded), y_true=y_test)
 
 """### Evaluasi Setelah Tuning
